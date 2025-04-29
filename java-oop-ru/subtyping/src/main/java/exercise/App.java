@@ -7,13 +7,11 @@ import java.util.Set;
 
 // BEGIN
 public class App {
-    public static InMemoryKV swapKeyValue(KeyValueStorage storage) {
-        var st = storage.toMap().entrySet();
-        HashMap<String, String> result = new HashMap<>();
-        for (var entry : st) {
-            result.put(entry.getValue(), entry.getKey());
-        }
-        return new InMemoryKV(result);
+    public static void swapKeyValue(KeyValueStorage storage) {
+        Map<String, String> st = storage.toMap();
+        Set<Entry<String, String>> entrySet = st.entrySet();
+        entrySet.forEach(entry -> storage.unset(entry.getKey()));
+        entrySet.forEach(entry -> storage.set(entry.getValue(), entry.getKey()));
     }
 }
 // END
