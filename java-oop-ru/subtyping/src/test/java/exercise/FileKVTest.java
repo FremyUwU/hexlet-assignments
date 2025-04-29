@@ -40,6 +40,8 @@ class FileKVTest {
         assertThat(a.toMap()).isEqualTo(Map.of("key", "10","meme", "fst"));
 
         a.unset("meme");
+        assertThat(a.get("meme", "no")).isEqualTo("no");
+
         assertThat(a.toMap()).isEqualTo(Map.of("key", "10"));
     }
     // END
