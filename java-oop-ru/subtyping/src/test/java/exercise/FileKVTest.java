@@ -11,7 +11,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 // BEGIN
 
 // END
@@ -30,19 +30,20 @@ class FileKVTest {
 
     // BEGIN
     @Test
-    void test1(){
-        var a = new FileKV("src/test/resources/file", Map.of("key", "10"));
+    void fileKVTest() {
+        KeyValueStorage storage = new FileKV("src/test/resources/file", Map.of("key", "value"));
+        assertThat(storage.get("key2", "default")).isEqualTo("default");
+        assertThat(storage.get("key", "default")).isEqualTo("value");
 
-        assertThat(a.get("key", "default")).isEqualTo("10");
-        assertThat(a.get("aboba", "default")).isEqualTo("default");
+        storage.set("key3", "value3");
+        storage.set("key", "10");
+        assertThat(storage.get("key3", "default")).isEqualTo("value3");
+        assertThat(storage.get("key", "default")).isEqualTo("10");
 
-        a.set("meme", "fst");
-        assertThat(a.toMap()).isEqualTo(Map.of("key", "10","meme", "fst"));
+        storage.unset("key");
+        assertThat(storage.get("key", "def")).isEqualTo("def");
 
-        a.unset("meme");
-        assertThat(a.get("meme", "no")).isEqualTo("no");
-
-        assertThat(a.toMap()).isEqualTo(Map.of("key", "10"));
+        assertThat(storage.toMap()).isEqualTo(Map.of("key3", "value3"));
     }
     // END
 }
